@@ -23,13 +23,11 @@ void setup() {
   Serial.begin(9600);
   
 //initialize all input and output pins
-    struct controller_pins pins =  {12, 11, 10, 9, 13, 18};
-    int output[] = {9,12,13,11,10,3,13,18};
+    struct controller_pins pins =  {13, 12, 11, 10, 9, 3};
+    int num_output = 6;
+    int num_input = 2;
+    int output[] = {9,12,13,11,10,3};
     int input[] = {4,5};
-    int num_output = sizeof(output);
-    int num_input = sizeof(input);
-
-
     for (int i = 0; i < num_output; i++) {
         pinMode(output[i], OUTPUT);
     }
