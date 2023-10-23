@@ -10,7 +10,7 @@
 #define LEFT 0
 
 //Prototypes
-
+int new_func();
 void to_pool();
 String mission();
 void navigation();
