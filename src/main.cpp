@@ -11,7 +11,6 @@
 #define thieves 5
 
 //Prototypes
-int new_func();
 void to_pool();
 String mission();
 void navigation();
