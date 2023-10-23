@@ -8,7 +8,6 @@
 #define SOMEVALUE 4
 #define RIGHT 1
 #define LEFT 0
-#define thieves 5
 
 //Prototypes
 void to_pool();
