@@ -11,7 +11,6 @@
 
 //Prototypes
 
-void makeNewFunctionTest();
 void to_pool();
 String mission();
 void navigation();
@@ -92,7 +91,6 @@ void forward(struct controller_pins *pins, char axis, int coord, int motor_speed
 }
 
 void turn(struct controller_pins *pins, float angle, int motor_speed){
-      Serial. println("hello");
     float heading = Enes100.getTheta();
     analogWrite(pins->ENA, motor_speed);
     analogWrite(pins->ENB, motor_speed);
