@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <stdio.h>
 #include <Enes100.h>
-#include <Stepper.h>
 
 #include <math.h>
 #include <assert.h>
