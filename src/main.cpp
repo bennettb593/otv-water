@@ -39,11 +39,6 @@ struct controller_pins {
 
 void setup() {
     Serial.begin(9600);
-    struct controller_pins pins =  {13, 12, 11, 10, 9, 3, trigPin, echoPin};
-    int num_output = 7;
-    int num_input = 3;
-    int output[] = {9,12,13,11,10,3,trigPin};
-    int input[] = {4,5,echoPin};
     for (int i = 0; i < num_output; i++) {
         pinMode(output[i], OUTPUT);
     }
@@ -58,6 +53,7 @@ void loop() {
     begin_mission(&pins);
     //drive to pool
     pool_navigate_aruco(&pins);
+    approach_pool(&pins)
 
 
 
