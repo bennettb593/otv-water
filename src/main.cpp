@@ -58,7 +58,7 @@ void setup() {
 
 
 void loop() {
-    struct controller_pins pins =  {13, 12, 11, 10, 9, 3};
+    struct controller_pins pins =  {12, 11, 10, 9, 13, 18, 24, 26, 50, 52};
     begin_mission(&pins);
     //drive to pool
     pool_navigate_aruco(&pins);
