@@ -35,19 +35,25 @@ struct controller_pins {
     int echoPin;
     int tx;
     int rx;
-    int power;
 };
 
 //initialize all input and output pins
 
 void setup() {
-    Serial.begin(9600);
+    struct controller_pins pins =  {12, 11, 10, 9, 13, 18, 24, 26, 50, 52};
+    int output[] = {12,11,10,9,24,50,52};
+    int input[] = {26};
+    int num_output = sizeof(output) / 2;
+    int num_input = sizeof(input) / 2;
+
+
     for (int i = 0; i < num_output; i++) {
         pinMode(output[i], OUTPUT);
     }
     for (int i = 0; i < num_input; i++){
-        pinMode(input[i], OUTPUT);
+        pinMode(input[i], INPUT);
     }
+}
 }
 
 
