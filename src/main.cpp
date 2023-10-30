@@ -33,6 +33,9 @@ struct controller_pins {
     int ENB;
     int trigPin;
     int echoPin;
+    int tx;
+    int rx;
+    int power;
 };
 
 //initialize all input and output pins
