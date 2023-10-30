@@ -17,8 +17,8 @@ void turn(struct controller_pins *, float angle, int motor_speed);
 void forward(struct controller_pins *, char axis, int coord, int motor_speed);
 void pool_navigate_aruco(struct controller_pins *pins);
 void motor_off(struct controller_pins *);
-void approach_pool(struct contoller_pins *);
-float get_distance(struct controller_pins *)
+void approach_pool(struct controller_pins *);
+float get_distance(struct controller_pins *);
 void pool_navigate_distance_sensor(struct controller_pins *);
 void obstacle_navigate_distance_sensor(struct controller_pins *);
 void begin_mission(struct controller_pins *);
@@ -40,7 +40,6 @@ struct controller_pins {
 //initialize all input and output pins
 
 void setup() {
-    struct controller_pins pins =  {12, 11, 10, 9, 13, 18, 24, 26, 50, 52};
     int output[] = {12,11,10,9,24,50,52};
     int input[] = {26};
     int num_output = sizeof(output) / 2;
@@ -54,7 +53,6 @@ void setup() {
         pinMode(input[i], INPUT);
     }
 }
-}
 
 
 void loop() {
@@ -62,7 +60,7 @@ void loop() {
     begin_mission(&pins);
     //drive to pool
     pool_navigate_aruco(&pins);
-    approach_pool(&pins)
+    approach_pool(&pins);
 
 
 
@@ -154,15 +152,15 @@ void pool_navigate_aruco(struct controller_pins *pins){
 
 
 
-  void approach_pool(struct controller_pins *pins, float dist){
+  void approach_pool(struct controller_pins *pins){
     int motor_speed;
-    dist = dist_sensor();
+    int dist = get_distance(pins);
     while (dist > SOMEVALUE){
         analogWrite(pins->ENA, motor_speed);
         analogWrite(pins->ENB, motor_speed);
         digitalWrite(pins->in1, HIGH);
         digitalWrite(pins->in3, HIGH);
-        dist = dist_sensor();
+        dist = get_distance(pins);
     }
     motor_off(pins);
     
@@ -170,16 +168,16 @@ void pool_navigate_aruco(struct controller_pins *pins){
   }
 
 //returns sensor distance in cm
-float get_distance(struct controller_pins **pins) {
+float get_distance(struct controller_pins *pins) {
   float duration, distance;
-  digitalWrite(trigPin, LOW);
+  digitalWrite(pins->trigPin, LOW);
   delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
+  digitalWrite(pins->trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
+  digitalWrite(pins->trigPin, LOW);
 
   noInterrupts(); 
-  duration = pulseIn(echoPin, HIGH); 
+  duration = pulseIn(pins->echoPin, HIGH); 
   interrupts();
 
   distance = (duration*.0343)/2;
@@ -187,31 +185,32 @@ float get_distance(struct controller_pins **pins) {
   delay(100);
 }
 
-void pool_navigate_distance_sensor(struct controller_pins **pins){
+void pool_navigate_distance_sensor(struct controller_pins *pins){
   float stop_distance = 17.496;
 
-  forward();
-  while(get_distance() > stop_distance){
+  //forward
+  while(get_distance(pins) > stop_distance){
 
   }
-  motor_off();
+  motor_off(pins);
 }
 
-void obstacle_navigate_distance_sensor(struct controller_pins **pins){
+
+void obstacle_navigate_distance_sensor(struct controller_pins *pins){
   float stop_distance = 12;
 
-  forward();
-  while(get_distance() > stop_distance){
+  //forward
+  while(get_distance(pins) > stop_distance){
 
   }
-  motor_off();
-  turn(&pins, 1.57, 255);
-  if(get_distance < stop_distance){
-    turn(&pins, -1.57, 255);
+  motor_off(pins);
+  turn(pins, 1.57, 255);
+  if(get_distance(pins) < stop_distance){
+    turn(pins, -1.57, 255);
   }
   else
   {
-    forward();
+    //forward
   }
 }
 
