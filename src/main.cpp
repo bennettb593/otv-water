@@ -10,7 +10,6 @@
 #define LEFT 0
 
 //Prototypes
-
 void to_pool();
 String mission();
 void navigation();
@@ -19,7 +18,9 @@ void forward(struct controller_pins *, char axis, int coord, int motor_speed);
 void pool_navigate_aruco(struct controller_pins *pins);
 void motor_off(struct controller_pins *);
 void approach_pool(struct contoller_pins *);
-float dist_sensor();
+float get_distance(struct controller_pins *)
+void pool_navigate_distance_sensor(struct controller_pins *);
+void obstacle_navigate_distance_sensor(struct controller_pins *);
 void begin_mission(struct controller_pins *);
 
 //Arduino pin assignments
@@ -30,17 +31,14 @@ struct controller_pins {
     int in4;
     int ENA;
     int ENB;
+    int trigPin;
+    int echoPin;
 };
 
 //initialize all input and output pins
 
 void setup() {
     Serial.begin(9600);
-    struct controller_pins pins =  {12, 11, 10, 9, 13, 8};
-    int num_output = 6;
-    int num_input = 2;
-    int output[] = {9,12,13,11,10,3};
-    int input[] = {4,5};
     for (int i = 0; i < num_output; i++) {
         pinMode(output[i], OUTPUT);
     }
@@ -161,6 +159,52 @@ void pool_navigate_aruco(struct controller_pins *pins){
     
 
   }
+
+//returns sensor distance in cm
+float get_distance(struct controller_pins **pins) {
+  float duration, distance;
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  noInterrupts(); 
+  duration = pulseIn(echoPin, HIGH); 
+  interrupts();
+
+  distance = (duration*.0343)/2;
+  return distance;
+  delay(100);
+}
+
+void pool_navigate_distance_sensor(struct controller_pins **pins){
+  float stop_distance = 17.496;
+
+  forward();
+  while(get_distance() > stop_distance){
+
+  }
+  motor_off();
+}
+
+void obstacle_navigate_distance_sensor(struct controller_pins **pins){
+  float stop_distance = 12;
+
+  forward();
+  while(get_distance() > stop_distance){
+
+  }
+  motor_off();
+  turn(&pins, 1.57, 255);
+  if(get_distance < stop_distance){
+    turn(&pins, -1.57, 255);
+  }
+  else
+  {
+    forward();
+  }
+}
 
   void begin_mission(struct controller_pins *pins){
       //Enes100.begin(const char* teamName, byte teamType, int markerId, int wifiModuleTX, int wifiModuleRX);
