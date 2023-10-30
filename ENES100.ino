@@ -12,7 +12,7 @@ struct controller_pins {
     int echoPin;
     int tx;
     int rx;
-    int power;
+
 
 
 };
@@ -22,7 +22,7 @@ void setup() {
   Serial.begin(9600);
   
 //initialize all input and output pins
-    struct controller_pins pins =  {12, 11, 10, 9, 13, 18, 24, 26, 50, 52, 48};
+    struct controller_pins pins =  {12, 11, 10, 9, 13, 18, 24, 26, 50, 52};
     int output[] = {9,12,13,11,10,3,13,18, 48, 52, 50};
     int input[] = {4,5, 26};
     int num_output = sizeof(output) / 2;
@@ -39,7 +39,6 @@ void setup() {
 
 
 void loop() {
-    digitalWrite(48, OUTPUT);
     struct controller_pins pins =  {12, 11, 10, 9, 13, 18, 24, 26, 50, 52, 48};
 
     forward(&pins, 255);
