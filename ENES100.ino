@@ -1,12 +1,4 @@
-//Function prototypes
-void to_pool();
-String mission();
-void navigation();
 
-void turn(struct controller_pins *, String direction, int motor_speed);
-void forward(struct controller_pins *, int motor_speed);
-void pool_navigate_aruco();
-void motor_off(struct controller_pins *);
 
 //Arduino pin assignments
 struct controller_pins {
@@ -16,6 +8,13 @@ struct controller_pins {
     int in4;
     int ENA;
     int ENB;
+    int trigPin;
+    int echoPin;
+    int tx;
+    int rx;
+    int power;
+
+
 };
 
 
@@ -23,39 +22,33 @@ void setup() {
   Serial.begin(9600);
   
 //initialize all input and output pins
-    struct controller_pins pins =  {12, 11, 10, 9, 13, 18};
-    int output[] = {9,12,13,11,10,3,13,18};
-    int input[] = {4,5};
-    int num_output = sizeof(output)/2;
-    int num_input = sizeof(input)/2;
-   Serial.println(num_output);
-  
+    struct controller_pins pins =  {12, 11, 10, 9, 13, 18, 24, 26, 50, 52, 48};
+    int output[] = {9,12,13,11,10,3,13,18, 48, 52, 50};
+    int input[] = {4,5, 26};
+    int num_output = sizeof(output) / 2;
+    int num_input = sizeof(input) / 2;
+
 
     for (int i = 0; i < num_output; i++) {
         pinMode(output[i], OUTPUT);
     }
     for (int i = 0; i < num_input; i++){
-        pinMode(input[i], OUTPUT);
+        pinMode(input[i], INPUT);
     }
 }
 
 
 void loop() {
+    digitalWrite(48, OUTPUT);
+    struct controller_pins pins =  {12, 11, 10, 9, 13, 18, 24, 26, 50, 52, 48};
 
-    struct controller_pins pins =  {12, 11, 10, 9, 13, 8};
     forward(&pins, 255);
-    delay(5000);
+    if (get_distance(&pins) <= 4){
+      motor_off(&pins);
+      turn(&pins, "RIGHT", 133);
+      delay(1000);
+    }
   motor_off(&pins);
-    turn(&pins, "LEFT", 133);
-  delay(1000);
-  motor_off(&pins);
-  forward(&pins, 255);
-  delay(5000);
-
-
-
-
-
 
 
 }
@@ -91,4 +84,24 @@ void motor_off(struct controller_pins *pins){
     digitalWrite(pins->in2, LOW);
     digitalWrite(pins->in3, LOW);
     digitalWrite(pins->in4, LOW);
+}
+
+float get_distance(struct controller_pins *pins) {
+  float duration, distance;
+  digitalWrite(pins ->trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pins->trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(pins->trigPin, LOW);
+  Serial.println(pins->echoPin);
+  //noInterrupts(); 
+  duration = pulseIn(pins->echoPin, HIGH); 
+  Serial.println(duration);
+
+  //interrupts();
+
+  distance = (duration*.0343*10)/2;
+  Serial.println(duration);
+  return distance;
+  delay(100);
 }
