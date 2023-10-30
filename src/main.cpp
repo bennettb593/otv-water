@@ -33,23 +33,32 @@ struct controller_pins {
     int ENB;
     int trigPin;
     int echoPin;
+    int tx;
+    int rx;
 };
 
 //initialize all input and output pins
 
 void setup() {
-    Serial.begin(9600);
+    struct controller_pins pins =  {12, 11, 10, 9, 13, 18, 24, 26, 50, 52};
+    int output[] = {12,11,10,9,24,50,52};
+    int input[] = {26};
+    int num_output = sizeof(output) / 2;
+    int num_input = sizeof(input) / 2;
+
+
     for (int i = 0; i < num_output; i++) {
         pinMode(output[i], OUTPUT);
     }
     for (int i = 0; i < num_input; i++){
-        pinMode(input[i], OUTPUT);
+        pinMode(input[i], INPUT);
     }
+}
 }
 
 
 void loop() {
-    struct controller_pins pins =  {13, 12, 11, 10, 9, 3};
+    struct controller_pins pins =  {12, 11, 10, 9, 13, 18, 24, 26, 50, 52};
     begin_mission(&pins);
     //drive to pool
     pool_navigate_aruco(&pins);
