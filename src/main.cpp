@@ -197,7 +197,7 @@ void pool_nav(){
     /*
     
     
-    drive to pool yah
+    drive to pool
 
     */
 
