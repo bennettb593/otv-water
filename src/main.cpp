@@ -194,12 +194,14 @@ void obstacle_navigate_distance_sensor(){
 void pool_nav(){
 
 
-    /* 
+    /*
     
     
-    drive to pool
+    drive to pool yah
 
     */
+
+    
    
     //get desired angle and position based on starting location
     float angle;
@@ -254,3 +256,4 @@ void mission(){
 
 
 }
+
